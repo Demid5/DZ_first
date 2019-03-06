@@ -59,7 +59,11 @@ public class WorkWithMassiv {
 
 
     //наибольшая непрерывно возрастающая подпоследователььность
-    public static int[] LIP(int [] mass) {
+    public static int[] longestIncrementingSubseq(int [] mass) {
+        if (mass.length == 0) {
+            int resultMass[] = new int[0];
+            return resultMass;
+        }
         int left = 0;
         int Left = 0, Right = 0;
         int distance = -1;
@@ -79,6 +83,8 @@ public class WorkWithMassiv {
             resultMass[i - Left] = mass[i];
         return resultMass;
     }
+
+
 
     public static int mediana(int [] mass) {
         mass = sort(mass);
