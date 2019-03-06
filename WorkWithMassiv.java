@@ -70,9 +70,11 @@ public class WorkWithMassiv {
 
         for (int right = 1; right < mass.length; ++right) {
             if (mass[right - 1] <= mass[right]) {
-                distance = right - left;
-                Right = right;
-                Left = left;
+                if (right - left > distance) {
+                    distance = right - left;
+                    Right = right;
+                    Left = left;
+                }
             }
             else {
                 left = right;
