@@ -21,9 +21,9 @@ class Archiver {
         return mass;
     }
 
-    public static void archiverFile(File input, File output) throws IOException {
-        try (FileInputStream fileInputStream = new FileInputStream(input);
-             FileOutputStream fileOutputStream = new FileOutputStream(output))
+    public static void archiverFile(FileInputStream input, FileOutputStream output) throws IOException {
+        try (BufferedInputStream fileInputStream = new BufferedInputStream(input);
+             BufferedOutputStream fileOutputStream = new BufferedOutputStream(output))
         {
             int current = 0;
             int lastByte = -1;
@@ -48,9 +48,6 @@ class Archiver {
             if (lastByte != -1) {
                 fileOutputStream.write(convertNumeToByteMass(count));
             }
-
-            fileInputStream.close();
-            fileOutputStream.close();
         }
 
     }

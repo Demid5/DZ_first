@@ -10,9 +10,9 @@ class Unarchiver {
         return result;
     }
 
-    public static void unArchiverFile(File input, File output) throws IOException {
-        try (FileInputStream fileInputStream = new FileInputStream(input);
-             FileOutputStream fileOutputStream = new FileOutputStream(output))
+    public static void unArchiverFile(FileInputStream input, FileOutputStream output) throws IOException {
+        try (BufferedInputStream fileInputStream = new BufferedInputStream(input);
+             BufferedOutputStream fileOutputStream = new BufferedOutputStream(output))
         {
             int currentFirst = 0;
             int sizeCountByteMass = 0;
@@ -30,9 +30,6 @@ class Unarchiver {
                     fileOutputStream.write((byte)currentFirst);
                 }
             }
-
-            fileInputStream.close();
-            fileOutputStream.close();
         }
     }
 }
