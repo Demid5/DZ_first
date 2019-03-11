@@ -45,7 +45,9 @@ class Archiver {
                 }
                 lastByte = current;
             }
-            fileOutputStream.write(convertNumeToByteMass(count));
+            if (lastByte != -1) {
+                fileOutputStream.write(convertNumeToByteMass(count));
+            }
 
             fileInputStream.close();
             fileOutputStream.close();
