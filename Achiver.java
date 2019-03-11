@@ -22,32 +22,34 @@ class Archiver {
     }
 
     public static void archiverFile(File input, File output) throws IOException {
-        FileInputStream fileInputStream = new FileInputStream(input);
-        FileOutputStream fileOutputStream = new FileOutputStream(output);
+        try (FileInputStream fileInputStream = new FileInputStream(input);
+             FileOutputStream fileOutputStream = new FileOutputStream(output))
+        {
+            int current = 0;
+            int lastByte = -1;
+            int count = 0;
+            while ((current = fileInputStream.read()) != -1) {
 
-        int current = 0;
-        int lastByte = -1;
-        int count = 0;
-        while ((current = fileInputStream.read()) != -1) {
-
-            if (current == lastByte) {
-                count++;
-            }
-            else {
-                if (count != 0) {
-                    fileOutputStream.write(convertNumeToByteMass(count));
+                if (current == lastByte) {
+                    count++;
                 }
-                count = 1;
-            }
+                else {
+                    if (count != 0) {
+                        fileOutputStream.write(convertNumeToByteMass(count));
+                    }
+                    count = 1;
+                }
 
-            if (count == 1) {
-                fileOutputStream.write((byte)current);
+                if (count == 1) {
+                    fileOutputStream.write((byte)current);
+                }
+                lastByte = current;
             }
-            lastByte = current;
+            fileOutputStream.write(convertNumeToByteMass(count));
+
+            fileInputStream.close();
+            fileOutputStream.close();
         }
-        fileOutputStream.write(convertNumeToByteMass(count));
 
-        fileInputStream.close();
-        fileOutputStream.close();
     }
 }

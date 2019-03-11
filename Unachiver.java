@@ -11,27 +11,28 @@ class Unarchiver {
     }
 
     public static void unArchiverFile(File input, File output) throws IOException {
-        FileInputStream fileInputStream = new FileInputStream(input);
-        FileOutputStream fileOutputStream = new FileOutputStream(output);
+        try (FileInputStream fileInputStream = new FileInputStream(input);
+             FileOutputStream fileOutputStream = new FileOutputStream(output))
+        {
+            int currentFirst = 0;
+            int sizeCountByteMass = 0;
+            int count = 0;
 
-        int currentFirst = 0;
-        int sizeCountByteMass = 0;
-        int count = 0;
+            while ((currentFirst = fileInputStream.read()) != -1) {
+                sizeCountByteMass = fileInputStream.read();
+                byte mass[] = new byte[sizeCountByteMass];
+                for (int i = 0; i < sizeCountByteMass; ++i) {
+                    mass[i] = (byte)fileInputStream.read();
+                }
+                count = convertByteMassToInt(mass);
 
-        while ((currentFirst = fileInputStream.read()) != -1) {
-            sizeCountByteMass = fileInputStream.read();
-            byte mass[] = new byte[sizeCountByteMass];
-            for (int i = 0; i < sizeCountByteMass; ++i) {
-                mass[i] = (byte)fileInputStream.read();
+                for (int i = 0; i < count; ++i) {
+                    fileOutputStream.write((byte)currentFirst);
+                }
             }
-            count = convertByteMassToInt(mass);
 
-            for (int i = 0; i < count; ++i) {
-                fileOutputStream.write((byte)currentFirst);
-            }
+            fileInputStream.close();
+            fileOutputStream.close();
         }
-
-        fileInputStream.close();
-        fileOutputStream.close();
     }
 }
