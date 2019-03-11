@@ -69,7 +69,7 @@ public class WorkWithMassiv {
         int distance = -1;
 
         for (int right = 1; right < mass.length; ++right) {
-            if (mass[right - 1] <= mass[right]) {
+            if (mass[right - 1] < mass[right]) {
                 if (right - left > distance) {
                     distance = right - left;
                     Right = right;
