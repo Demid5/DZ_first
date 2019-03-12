@@ -3,24 +3,6 @@ import java.io.*;
 
 class Archiver {
 
-    private static byte[] convertNumeToByteMass(int num) {
-        int size = 0;
-        int newNum = num;
-        while (num > 0) {
-            size++;
-            num /= 127;
-        }
-        size++;
-        byte mass[] = new byte[size];
-        mass[0] = (byte)(size - 1);
-
-        while (newNum > 0) {
-            mass[--size] = (byte)(newNum % 127);
-            newNum /= 127;
-        }
-        return mass;
-    }
-
     public static void archiverFile(FileInputStream input, FileOutputStream output) throws IOException {
         try (BufferedInputStream fileInputStream = new BufferedInputStream(input);
              BufferedOutputStream fileOutputStream = new BufferedOutputStream(output))
@@ -30,23 +12,19 @@ class Archiver {
             int count = 0;
             while ((current = fileInputStream.read()) != -1) {
 
-                if (current == lastByte) {
-                    count++;
-                }
-                else {
-                    if (count != 0) {
-                        fileOutputStream.write(convertNumeToByteMass(count));
+                if (current != lastByte || count == 255) {
+                    if (count > 0) {
+                        fileOutputStream.write((byte)count);
                     }
+                    fileOutputStream.write((byte)current);
                     count = 1;
                 }
-
-                if (count == 1) {
-                    fileOutputStream.write((byte)current);
+                else {
+                    count++;
                 }
-                lastByte = current;
             }
             if (lastByte != -1) {
-                fileOutputStream.write(convertNumeToByteMass(count));
+                fileOutputStream.write((byte)count);
             }
         }
 
